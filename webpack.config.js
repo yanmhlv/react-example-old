@@ -1,44 +1,24 @@
 const path = require('path');
-const webpack = require('webpack');
+
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
+    template: './src/index.html',
+    filename: 'index.html',
+    inject: 'body'
+});
 
 module.exports = {
+    entry: './src/index.js',
+    output: {
+        path: path.resolve('dist'),
+        filename: 'bundle.js'
+    },
     module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['env']
-                    }
-                }
-            }
-        ],
         loaders: [
-            {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
-            {test: /\.css$/, loader: 'style-loader!css-loader'},
-            {test: /(\.eot|\.woff2|\.woff|\.ttf|\.svg)/, loader: 'file-loader'},
+            {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/},
+            {test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/}
         ]
     },
-    plugins: [
-        // new webpack.DefinePlugin({
-        //     'process.env': {
-        //         NODE_ENV: JSON.stringify('production')
-        //     }
-        // }),
-        // new webpack.optimize.UglifyJsPlugin()
-    ],
-    context: path.resolve(__dirname, 'src'),
-    entry: {
-        app: './index.js',
-    },
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: '[name].bundle.js',
-    },
-    devServer: {
-        port: 8080,
-        historyApiFallback: true
-    },
+    plugins: [HtmlWebpackPluginConfig]
 };
